@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Download, RefreshCcw, CheckCircle2, XCircle, MapPin, Briefcase, Banknote, AlertTriangle, Layers, Building, Sparkles, Search } from 'lucide-react';
 import { IslamicGeometricArt } from './IslamicPattern';
+import SearchableSelect from './SearchableSelect';
 import { apiFetch } from '../lib/api';
 
 interface SimulationResult {
@@ -155,14 +156,21 @@ export default function TaxAllowanceSimulator() {
             {loadError && <p className="text-xs text-red-500 mb-2">{loadError}</p>}
             <div className="relative">
               <MapPin className="absolute left-0 top-1/2 -translate-y-1/2 w-5 h-5 text-green-600/70" />
-              <select
+              <SearchableSelect
                 value={provinsi}
-                onChange={(e) => { setProvinsi(e.target.value); setBidangUsaha(''); setCakupanBidangUsaha(''); setAvailableBidangUsaha([]); setAvailableCakupan([]); setInvestmentCriteria(null); setResult(null); }}
-                className="w-full bg-transparent border-b border-gray-200 py-3 pl-10 pr-4 text-gray-900 text-lg font-medium appearance-none outline-none focus:border-green-600 transition-colors cursor-pointer"
-              >
-                <option value="" className="bg-white text-gray-400">Pilih Provinsi...</option>
-                {provinces.map(p => <option key={p} value={p} className="bg-white">{p}</option>)}
-              </select>
+                options={provinces}
+                onChange={(selectedValue) => {
+                  setProvinsi(selectedValue);
+                  setBidangUsaha('');
+                  setCakupanBidangUsaha('');
+                  setAvailableBidangUsaha([]);
+                  setAvailableCakupan([]);
+                  setInvestmentCriteria(null);
+                  setResult(null);
+                }}
+                placeholder="Pilih Provinsi..."
+                searchPlaceholder="Cari provinsi..."
+              />
             </div>
           </div>
 
@@ -171,15 +179,20 @@ export default function TaxAllowanceSimulator() {
             <label className="text-[10px] uppercase tracking-widest text-gray-400 mb-2 block font-semibold transition-colors group-focus-within:text-green-600">Bidang Usaha</label>
             <div className="relative">
               <Briefcase className="absolute left-0 top-1/2 -translate-y-1/2 w-5 h-5 text-green-600/70" />
-              <select
+              <SearchableSelect
                 value={bidangUsaha}
-                onChange={(e) => { setBidangUsaha(e.target.value); setCakupanBidangUsaha(''); setAvailableCakupan([]); setInvestmentCriteria(null); setResult(null); }}
+                options={availableBidangUsaha}
+                onChange={(selectedValue) => {
+                  setBidangUsaha(selectedValue);
+                  setCakupanBidangUsaha('');
+                  setAvailableCakupan([]);
+                  setInvestmentCriteria(null);
+                  setResult(null);
+                }}
+                placeholder="Pilih Bidang Usaha..."
                 disabled={!provinsi}
-                className="w-full bg-transparent border-b border-gray-200 py-3 pl-10 pr-4 text-gray-900 text-lg font-medium appearance-none outline-none focus:border-green-600 transition-colors cursor-pointer disabled:opacity-40"
-              >
-                <option value="" className="bg-white text-gray-400">Pilih Bidang Usaha...</option>
-                {availableBidangUsaha.map(b => <option key={b} value={b} className="bg-white">{b}</option>)}
-              </select>
+                searchPlaceholder="Cari bidang usaha..."
+              />
             </div>
           </div>
 
@@ -188,15 +201,19 @@ export default function TaxAllowanceSimulator() {
             <label className="text-[10px] uppercase tracking-widest text-gray-400 mb-2 block font-semibold transition-colors group-focus-within:text-green-600">Cakupan Bidang Usaha</label>
             <div className="relative">
               <Layers className="absolute left-0 top-1/2 -translate-y-1/2 w-5 h-5 text-green-600/70" />
-              <select
+              <SearchableSelect
                 value={cakupanBidangUsaha}
-                onChange={(e) => { setCakupanBidangUsaha(e.target.value); setInvestmentCriteria(null); setResult(null); }}
+                options={availableCakupan}
+                onChange={(selectedValue) => {
+                  setCakupanBidangUsaha(selectedValue);
+                  setInvestmentCriteria(null);
+                  setResult(null);
+                }}
+                placeholder="Pilih Cakupan..."
                 disabled={!bidangUsaha}
-                className="w-full bg-transparent border-b border-gray-200 py-3 pl-10 pr-4 text-gray-900 text-lg font-medium appearance-none outline-none focus:border-amber-500 transition-colors cursor-pointer disabled:opacity-40"
-              >
-                <option value="" className="bg-white text-gray-400">Pilih Cakupan...</option>
-                {availableCakupan.map(c => <option key={c} value={c} className="bg-white">{c}</option>)}
-              </select>
+                searchPlaceholder="Cari cakupan..."
+                className="focus:border-amber-500"
+              />
             </div>
           </div>
 

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { BookOpen } from 'lucide-react';
+import { ArrowLeft, BookOpen, Search } from 'lucide-react';
 import TaxHolidaySimulator from './TaxHolidaySimulator';
 import TaxAllowanceSimulator from './TaxAllowanceSimulator';
 import IslamicPattern, { IslamicGeometricArt } from './IslamicPattern';
@@ -11,8 +11,17 @@ const fadeUp = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] as any } }
 };
 
+const simulatorTabs = [
+  { id: 'holiday', label: 'Tax Holiday' },
+  { id: 'allowance', label: 'Tax Allowance' },
+  { id: 'super_deduction', label: 'Super Tax Deduction' },
+  { id: 'bea_masuk', label: 'Bea Masuk' },
+] as const;
+
+type SimulatorTab = (typeof simulatorTabs)[number]['id'];
+
 export default function UserPage() {
-  const [activeTab, setActiveTab] = useState<'holiday' | 'allowance'>('holiday');
+  const [activeTab, setActiveTab] = useState<SimulatorTab>('holiday');
 
   return (
     <div className="min-h-screen bg-white text-[#030213] overflow-hidden relative font-body selection:bg-green-500/20 selection:text-green-900">
@@ -33,17 +42,27 @@ export default function UserPage() {
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           className="flex items-center justify-between w-full max-w-5xl px-6 py-3 bg-white/90 backdrop-blur-2xl border border-gray-200 rounded-full shadow-lg shadow-gray-200/60"
         >
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 min-w-0">
             <img 
               src="/img/img-knks.png" 
               alt="KNKS Logo" 
               className="h-8 w-auto object-contain"
             />
             <div className="h-6 w-px bg-gray-300" />
-            <div>
-              <p className="text-gray-900 text-sm font-semibold tracking-wide font-display">SIMULATOR INSENTIF</p>
+            <div className="min-w-0">
+              <p className="text-gray-900 text-sm font-semibold tracking-wide font-display truncate">SIMULATOR INSENTIF KAWASAN INDUSTRI HALAL</p>
             </div>
           </div>
+          <a
+            href="https://kneks.go.id"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 shrink-0 px-3 sm:px-4 py-2 rounded-full text-xs font-semibold border border-green-200 bg-green-50 text-green-700 hover:bg-green-100 hover:text-green-800 transition-colors"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Kembali ke Web KNEKS</span>
+            <span className="sm:hidden">KNEKS</span>
+          </a>
         </motion.div>
       </nav>
 
@@ -73,17 +92,17 @@ export default function UserPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.8 }}
-          className="w-full max-w-[28rem] p-1.5 bg-gray-100 border border-gray-200 rounded-2xl flex relative z-20 shadow-sm mb-12"
+          className="w-full max-w-[44rem] p-1.5 bg-gray-100 border border-gray-200 rounded-2xl grid grid-cols-2 md:grid-cols-4 gap-1.5 relative z-20 shadow-sm mb-12"
         >
-          {['holiday', 'allowance'].map((tab) => (
+          {simulatorTabs.map((tab) => (
             <button
-              key={tab}
-              onClick={() => setActiveTab(tab as 'holiday' | 'allowance')}
-              className={`relative flex-1 py-4 px-6 text-sm font-medium rounded-xl transition-all duration-500 z-10 ${
-                activeTab === tab ? 'text-white' : 'text-gray-500 hover:text-green-700'
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`relative py-3 px-4 text-sm font-medium rounded-xl transition-all duration-500 z-10 ${
+                activeTab === tab.id ? 'text-white' : 'text-gray-500 hover:text-green-700'
               }`}
             >
-              {activeTab === tab && (
+              {activeTab === tab.id && (
                 <motion.div
                   layoutId="active-tab"
                   className="absolute inset-0 bg-gradient-to-r from-green-600 to-green-800 rounded-xl shadow-lg shadow-green-500/20"
@@ -91,7 +110,7 @@ export default function UserPage() {
                 />
               )}
               <span className="relative z-20 tracking-wide font-semibold">
-                {tab === 'holiday' ? 'Tax Holiday' : 'Tax Allowance'}
+                {tab.label}
               </span>
             </button>
           ))}
@@ -120,9 +139,26 @@ export default function UserPage() {
                    <motion.div key="holiday" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.98 }} transition={{ duration: 0.4, ease: "easeOut" }}>
                      <TaxHolidaySimulator />
                    </motion.div>
-                 ) : (
+                 ) : activeTab === 'allowance' ? (
                    <motion.div key="allowance" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.98 }} transition={{ duration: 0.4, ease: "easeOut" }}>
                      <TaxAllowanceSimulator />
+                   </motion.div>
+                 ) : (
+                   <motion.div
+                     key={activeTab}
+                     initial={{ opacity: 0, scale: 0.98 }}
+                     animate={{ opacity: 1, scale: 1 }}
+                     exit={{ opacity: 0, scale: 0.98 }}
+                     transition={{ duration: 0.4, ease: 'easeOut' }}
+                     className="min-h-[500px] flex items-center justify-center"
+                   >
+                     <div className="text-center max-w-md px-6 py-10 rounded-2xl border border-dashed border-gray-300 bg-gray-50/80">
+                       <Search className="w-12 h-12 text-green-500/50 mx-auto mb-5" />
+                       <h3 className="text-2xl font-display text-gray-900 mb-2">Coming soon</h3>
+                       <p className="text-sm text-gray-500 leading-relaxed">
+                         Modul <span className="font-semibold text-gray-700">{simulatorTabs.find(tab => tab.id === activeTab)?.label}</span> sedang dalam proses pengembangan.
+                       </p>
+                     </div>
                    </motion.div>
                  )}
               </AnimatePresence>

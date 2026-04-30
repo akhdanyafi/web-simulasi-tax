@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Download, RefreshCcw, CheckCircle2, XCircle, MapPin, Clock, Banknote, AlertTriangle, Layers, Building, Sparkles, FileText, Search } from 'lucide-react';
 import { IslamicGeometricArt } from './IslamicPattern';
+import SearchableSelect from './SearchableSelect';
 import { apiFetch } from '../lib/api';
 
 interface SimulationResult {
@@ -147,14 +148,21 @@ export default function TaxHolidaySimulator() {
             {loadError && <p className="text-xs text-red-500 mb-2">{loadError}</p>}
             <div className="relative">
               <MapPin className="absolute left-0 top-1/2 -translate-y-1/2 w-5 h-5 text-green-600/70" />
-              <select
+              <SearchableSelect
                 value={provinsi}
-                onChange={(e) => { setProvinsi(e.target.value); setCakupan(''); setJangkaWaktu(''); setAvailableCakupan([]); setAvailableJangkaWaktu([]); setInvestmentRange(null); setResult(null); }}
-                className="w-full bg-transparent border-b border-gray-200 py-3 pl-10 pr-4 text-gray-900 text-lg font-medium appearance-none outline-none focus:border-green-600 transition-colors cursor-pointer"
-              >
-                <option value="" className="bg-white text-gray-400">Pilih Provinsi...</option>
-                {provinces.map(p => <option key={p} value={p} className="bg-white">{p}</option>)}
-              </select>
+                options={provinces}
+                onChange={(selectedValue) => {
+                  setProvinsi(selectedValue);
+                  setCakupan('');
+                  setJangkaWaktu('');
+                  setAvailableCakupan([]);
+                  setAvailableJangkaWaktu([]);
+                  setInvestmentRange(null);
+                  setResult(null);
+                }}
+                placeholder="Pilih Provinsi..."
+                searchPlaceholder="Cari provinsi..."
+              />
             </div>
           </div>
 
@@ -163,15 +171,20 @@ export default function TaxHolidaySimulator() {
             <label className="text-[10px] uppercase tracking-widest text-gray-400 mb-2 block font-semibold transition-colors group-focus-within:text-green-600">Cakupan / Jenis Industri</label>
             <div className="relative">
               <Layers className="absolute left-0 top-1/2 -translate-y-1/2 w-5 h-5 text-green-600/70" />
-              <select
+              <SearchableSelect
                 value={cakupan}
-                onChange={(e) => { setCakupan(e.target.value); setJangkaWaktu(''); setAvailableJangkaWaktu([]); setInvestmentRange(null); setResult(null); }}
+                options={availableCakupan}
+                onChange={(selectedValue) => {
+                  setCakupan(selectedValue);
+                  setJangkaWaktu('');
+                  setAvailableJangkaWaktu([]);
+                  setInvestmentRange(null);
+                  setResult(null);
+                }}
+                placeholder="Pilih Cakupan..."
                 disabled={!provinsi}
-                className="w-full bg-transparent border-b border-gray-200 py-3 pl-10 pr-4 text-gray-900 text-lg font-medium appearance-none outline-none focus:border-green-600 transition-colors cursor-pointer disabled:opacity-40"
-              >
-                <option value="" className="bg-white text-gray-400">Pilih Cakupan...</option>
-                {availableCakupan.map(c => <option key={c} value={c} className="bg-white">{c}</option>)}
-              </select>
+                searchPlaceholder="Cari cakupan..."
+              />
             </div>
           </div>
 
