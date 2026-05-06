@@ -70,7 +70,7 @@ export default function UserPage() {
       <main className="relative z-10 pt-36 pb-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto flex flex-col items-center text-center">
         <motion.div initial="hidden" animate="visible" variants={{ visible: { transition: { staggerChildren: 0.1 } } }} className="max-w-4xl flex flex-col items-center">
           <motion.h1 variants={fadeUp} className="text-5xl md:text-7xl font-display font-bold leading-[1.1] text-gray-900 mb-6">
-            Evaluasi <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-green-800 italic">Investasi Anda</span><br />
+            Simulasi <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-green-800 italic">Investasi Anda</span><br />
             Dengan Presisi.
           </motion.h1>
 
@@ -171,12 +171,19 @@ export default function UserPage() {
           initial={{ opacity: 0 }} 
           animate={{ opacity: 1 }} 
           transition={{ delay: 1 }}
-          className="mt-12 flex items-center justify-center gap-3 text-center"
+          className="mt-12 w-full max-w-4xl rounded-2xl border border-gray-200 bg-white/70 px-6 py-5 text-center shadow-sm backdrop-blur-sm"
         >
-          <BookOpen className="w-4 h-4 text-green-600" />
-          <p className="text-xs text-gray-400 tracking-wider font-light">
-            Output simulasi ini bersifat indikatif. Harap merujuk pada regulasi resmi otoritas berwenang.
-          </p>
+          <div className="flex items-center justify-center gap-3 text-center">
+            <BookOpen className="w-4 h-4 text-green-600" />
+            <p className="text-xs text-gray-400 tracking-wider font-light">
+              Output simulasi ini bersifat indikatif. Harap merujuk pada regulasi resmi otoritas berwenang.
+            </p>
+          </div>
+          <div className="mt-4 border-t border-gray-100 pt-4">
+            <p className="text-sm text-gray-600">
+              <span className="font-semibold text-gray-900">Created by:</span> Akhdan Yafi Widiyanto, Rayhan Juniardi, Ilham, Nabila
+            </p>
+          </div>
         </motion.div>
       </main>
     </div>
